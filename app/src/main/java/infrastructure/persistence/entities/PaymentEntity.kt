@@ -11,28 +11,29 @@ import infrastructure.persistence.model.SyncStatus
 
 
 /**
- * Payment persistence entity.
+ * PaymentEntity
  *
- * Financial transaction record.
+ * Financial transaction persistence model.
  *
- * Architectural Decisions:
+ * Architectural Contracts:
  *
  * ADR-007:
  * Database schema is source of truth.
  *
  * ADR-009:
- * Audit fields preserved.
+ * Audit trail integrity preserved.
  *
  * ADR-010:
- * Monetary calculations are NOT performed here.
- * Double is storage representation only.
+ * Monetary values are storage only.
+ * Domain layer converts Double -> BigDecimal.
  *
  * ADR-011:
- * rowVersion protects offline concurrent updates.
+ * Optimistic locking through rowVersion.
  *
  * ADR-012:
- * Repository owns transactions.
+ * Repository owns transaction boundaries.
  */
+@TypeConverters(SyncConverters::class)
 @Entity(
     tableName = "payments",
 
@@ -45,14 +46,12 @@ import infrastructure.persistence.model.SyncStatus
             onDelete = ForeignKey.SET_NULL
         ),
 
-
         ForeignKey(
             entity = PartyEntity::class,
             parentColumns = ["id"],
             childColumns = ["customer_party_id"],
             onDelete = ForeignKey.SET_NULL
         ),
-
 
         ForeignKey(
             entity = PartyEntity::class,
@@ -61,14 +60,12 @@ import infrastructure.persistence.model.SyncStatus
             onDelete = ForeignKey.SET_NULL
         ),
 
-
         ForeignKey(
             entity = CurrencyEntity::class,
             parentColumns = ["id"],
             childColumns = ["currency_id"],
             onDelete = ForeignKey.SET_NULL
         ),
-
 
         ForeignKey(
             entity = BankAccountEntity::class,
@@ -77,14 +74,12 @@ import infrastructure.persistence.model.SyncStatus
             onDelete = ForeignKey.SET_NULL
         ),
 
-
         ForeignKey(
             entity = CashBoxEntity::class,
             parentColumns = ["id"],
             childColumns = ["cash_box_id"],
             onDelete = ForeignKey.SET_NULL
         ),
-
 
         ForeignKey(
             entity = PaymentEntity::class,
@@ -93,20 +88,27 @@ import infrastructure.persistence.model.SyncStatus
             onDelete = ForeignKey.SET_NULL
         ),
 
-
-        /**
-         * Audit owner.
-         *
-         * Future DDL migration:
-         * NOT NULL + RESTRICT
-         */
+        // Audit owner
         ForeignKey(
             entity = UserEntity::class,
             parentColumns = ["id"],
             childColumns = ["created_by"],
             onDelete = ForeignKey.RESTRICT
-        )
+        ),
 
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["updated_by"],
+            onDelete = ForeignKey.SET_NULL
+        ),
+
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["deleted_by"],
+            onDelete = ForeignKey.SET_NULL
+        )
     ],
 
 
@@ -122,47 +124,42 @@ import infrastructure.persistence.model.SyncStatus
             unique = true
         ),
 
-
         Index(
-            value = ["sale_id"]
+            value = ["sale_id", "is_deleted"]
         ),
-
-
-        Index(
-            value = ["cash_box_id"]
-        ),
-
 
         Index(
             value = ["cash_box_id", "is_deleted"]
         ),
 
-
         Index(
-            value = ["customer_party_id"]
+            value = ["customer_party_id", "is_deleted"]
         ),
 
+        Index(
+            value = ["supplier_party_id", "is_deleted"]
+        ),
 
         Index(
             value = ["created_at"]
         ),
 
-
         Index(
             value = ["status"]
-        )
+        ),
 
+        Index(
+            value = ["sync_status"]
+        )
     ]
 )
 
 
-@TypeConverters(SyncConverters::class)
 data class PaymentEntity(
-
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long = 0,
+    override val id: Long = 0,
 
 
     @ColumnInfo(name = "uuid")
@@ -194,8 +191,9 @@ data class PaymentEntity(
 
 
     /**
-     * Storage only.
+     * Database storage only.
      *
+     * Never perform calculations here.
      * Domain converts to BigDecimal.
      */
     @ColumnInfo(name = "amount")
@@ -282,7 +280,9 @@ data class PaymentEntity(
     val notes: String? = null,
 
 
-    // Audit
+    // =========================
+    // Audit Contract
+    // =========================
 
     @ColumnInfo(name = "created_by")
     override val createdBy: Long,
@@ -312,10 +312,12 @@ data class PaymentEntity(
     override val isDeleted: Int = 0,
 
 
-    // Sync
+    // =========================
+    // Synchronization Contract
+    // =========================
 
     @ColumnInfo(name = "sync_status")
-    override val syncStatus: SyncStatus = SyncStatus.SYNCED,
+    override val syncStatus: SyncStatus = SyncStatus.PENDING,
 
 
     @ColumnInfo(name = "sync_version")
@@ -338,9 +340,10 @@ data class PaymentEntity(
     override val extraData: String? = null,
 
 
-    /**
-     * Optimistic locking.
-     */
+    // =========================
+    // Optimistic Locking
+    // =========================
+
     @ColumnInfo(name = "row_version")
     override val rowVersion: Int = 1
 
@@ -349,14 +352,14 @@ data class PaymentEntity(
     id = id,
     uuid = uuid,
 
-    createdAt = createdAt,
     createdBy = createdBy,
+    createdAt = createdAt,
 
-    updatedAt = updatedAt,
     updatedBy = updatedBy,
+    updatedAt = updatedAt,
 
-    deletedAt = deletedAt,
     deletedBy = deletedBy,
+    deletedAt = deletedAt,
 
     isDeleted = isDeleted,
 
@@ -364,10 +367,10 @@ data class PaymentEntity(
     syncVersion = syncVersion,
     syncAt = syncAt,
 
+    rowVersion = rowVersion,
+
     deviceId = deviceId,
 
     remarks = remarks,
-    extraData = extraData,
-
-    rowVersion = rowVersion
+    extraData = extraData
 )
