@@ -1,47 +1,132 @@
 package infrastructure.persistence.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
+import infrastructure.persistence.model.SyncStatus
+
 
 /**
- * الكيان الأساسي المجرد لجميع جداول قاعدة البيانات.
- * يحتوي على الحقول المشتركة الموجودة في جميع الجداول.
+ * Base persistence contract.
+ *
+ * This class is NOT a Room Entity.
+ *
+ * It only provides shared persistence fields.
+ *
+ * ADR-007:
+ * Database schema is the source of truth.
+ *
+ * ADR-008:
+ * UTC ISO-8601 timestamps.
+ *
+ * ADR-009:
+ * Financial audit preservation.
+ *
+ * ADR-011:
+ * Optimistic Offline Locking.
+ *
+ * ADR-012:
+ * Repository isolates persistence details.
  */
 abstract class BaseEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    open val id: Long = 0,
 
-    @ColumnInfo(name = "uuid")
-    open val uuid: String? = null,
+    /**
+     * SQLite primary key.
+     */
+    open val id: Long,
 
-    @ColumnInfo(name = "created_at")
-    open val createdAt: String? = null,
 
-    @ColumnInfo(name = "updated_at")
-    open val updatedAt: String? = null,
+    /**
+     * Globally unique identifier.
+     *
+     * Required for:
+     * - Offline creation
+     * - Device synchronization
+     * - Conflict resolution
+     */
+    open val uuid: String,
 
-    @ColumnInfo(name = "deleted_at")
-    open val deletedAt: String? = null,
 
-    @ColumnInfo(name = "is_deleted", defaultValue = "0")
-    open val isDeleted: Int = 0,
+    /**
+     * Creation audit.
+     */
+    open val createdAt: String?,
 
-    @ColumnInfo(name = "sync_status", defaultValue = "'synced'")
-    open val syncStatus: String = "synced",
+    open val createdBy: Long?,
 
-    @ColumnInfo(name = "sync_version", defaultValue = "1")
-    open val syncVersion: Int = 1,
 
-    @ColumnInfo(name = "sync_at")
-    open val syncAt: String? = null,
+    /**
+     * Modification audit.
+     */
+    open val updatedAt: String?,
 
-    @ColumnInfo(name = "device_id")
-    open val deviceId: String? = null,
+    open val updatedBy: Long?,
 
-    @ColumnInfo(name = "remarks")
-    open val remarks: String? = null,
 
-    @ColumnInfo(name = "extra_data")
-    open val extraData: String? = null
+    /**
+     * Soft delete audit.
+     */
+    open val deletedAt: String?,
+
+    open val deletedBy: Long?,
+
+
+    /**
+     * Soft delete flag.
+     *
+     * 0 = active
+     * 1 = deleted
+     */
+    open val isDeleted: Int,
+
+
+    /**
+     * Synchronization state.
+     *
+     * Stored as INTEGER through SyncConverters.
+     */
+    open val syncStatus: SyncStatus,
+
+
+    /**
+     * Synchronization revision.
+     */
+    open val syncVersion: Int,
+
+
+    /**
+     * Last successful sync timestamp.
+     */
+    open val syncAt: String?,
+
+
+    /**
+     * Device origin.
+     */
+    open val deviceId: String?,
+
+
+    /**
+     * Additional notes.
+     */
+    open val remarks: String?,
+
+
+    /**
+     * JSON extension field.
+     */
+    open val extraData: String?,
+
+
+    /**
+     * Optimistic Lock Version.
+     *
+     * Every successful update:
+     *
+     * row_version = row_version + 1
+     *
+     * Update condition:
+     *
+     * WHERE id = ?
+     * AND row_version = expectedVersion
+     */
+    open val rowVersion: Int = 1
+
 )
