@@ -1,23 +1,15 @@
 package com.example.app.data.model
 
 /**
- * Synchronization state persisted in SQLite as INTEGER.
+ * Synchronization state persisted as INTEGER.
  *
- * ADR-011:
- * Offline Optimistic Synchronization Contract.
- *
- * Storage mapping:
- *
- * PENDING  = 0
- * SYNCING  = 1
- * SYNCED   = 2
- * FAILED   = 3
- *
- * Never store String values in database.
+ * Database mapping:
+ * 0 = PENDING
+ * 1 = SYNCING
+ * 2 = SYNCED
+ * 3 = FAILED
  */
-enum class SyncStatus(
-    val code: Int
-) {
+enum class SyncStatus(val code: Int) {
 
     PENDING(0),
 
@@ -30,10 +22,7 @@ enum class SyncStatus(
 
     companion object {
 
-        fun fromCode(
-            code: Int
-        ): SyncStatus {
-
+        fun fromCode(code: Int): SyncStatus {
             return entries.firstOrNull {
                 it.code == code
             } ?: FAILED
