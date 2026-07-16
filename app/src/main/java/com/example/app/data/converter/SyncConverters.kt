@@ -4,18 +4,6 @@ import androidx.room.TypeConverter
 import com.example.app.data.model.SyncStatus
 
 
-/**
- * Room converters.
- *
- * Database:
- * INTEGER
- *
- * Application:
- * Enum
- *
- * ADR-011:
- * Prevent string-based synchronization corruption.
- */
 class SyncConverters {
 
 
@@ -35,10 +23,7 @@ class SyncConverters {
     ): SyncStatus? {
 
         return value?.let {
-
             SyncStatus.fromCode(it)
-
         }
-
     }
 }
