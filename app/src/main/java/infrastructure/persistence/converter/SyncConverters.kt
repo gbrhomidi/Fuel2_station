@@ -1,26 +1,23 @@
-package infrastructure.persistence.model
+package infrastructure.persistence.converter
+
+import androidx.room.TypeConverter
+import infrastructure.persistence.model.SyncStatus
 
 /**
- * Synchronization state persisted in SQLite as INTEGER.
- * ADR-011: Offline Optimistic Synchronization Contract.
- *
- * Storage mapping:
- * PENDING  = 0
- * SYNCING  = 1
- * SYNCED   = 2
- * FAILED   = 3
- *
- * Never store String values in database.
+ * Room converters.
+ * Database: INTEGER
+ * Application: Enum
+ * ADR-011: Prevent string-based synchronization corruption.
  */
-enum class SyncStatus(val code: Int) {
-    PENDING(0),
-    SYNCING(1),
-    SYNCED(2),
-    FAILED(3);
+class SyncConverters {
 
-    companion object {
-        fun fromCode(code: Int): SyncStatus {
-            return entries.firstOrNull { it.code == code } ?: FAILED
-        }
-    }
+    @TypeConverter
+    fun fromSyncStatus(
+        status: SyncStatus?
+    ): Int? = status?.code
+
+    @TypeConverter
+    fun toSyncStatus(
+        value: Int?
+    ): SyncStatus? = value?.let(SyncStatus::fromCode)
 }
