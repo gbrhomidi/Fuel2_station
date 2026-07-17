@@ -1,128 +1,89 @@
 package infrastructure.persistence.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import infrastructure.persistence.base.BaseEntity
 import infrastructure.persistence.types.SyncStatus
 
 
 @Entity(
-    tableName = "bank_accounts",
-
-    indices = [
-
-        Index(
-            value = ["uuid"],
-            unique = true
-        ),
-
-        Index(
-            value = ["account_number"],
-            unique = true
-        ),
-
-        Index(
-            value = ["is_deleted"]
-        )
+    tableName="bank_accounts",
+    indices=[
+        Index(value=["uuid"],unique=true),
+        Index(value=["account_number"],unique=true)
     ]
 )
 data class BankAccountEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey(autoGenerate=true)
+    val id:Long=0,
 
 
-    @ColumnInfo(name = "uuid")
-    override val uuid: String,
+    override val uuid:String,
 
 
-    @ColumnInfo(name = "account_number")
-    val accountNumber: String,
+    @ColumnInfo(name="account_number")
+    val accountNumber:String,
 
 
-    @ColumnInfo(name = "bank_name")
-    val bankName: String,
+    @ColumnInfo(name="bank_name")
+    val bankName:String,
 
 
-    @ColumnInfo(name = "account_holder")
-    val accountHolder: String,
+    @ColumnInfo(name="balance")
+    val balance:Double=0.0,
 
 
-    @ColumnInfo(name = "currency_id")
-    val currencyId: Long? = null,
+    @ColumnInfo(name="currency_id")
+    val currencyId:Long?=null,
 
 
-    @ColumnInfo(name = "created_by")
-    override val createdBy: Long,
+    override val createdBy:Long,
+
+    override val createdAt:String,
 
 
-    @ColumnInfo(name = "created_at")
-    override val createdAt: String,
+    override val updatedBy:Long?=null,
+
+    override val updatedAt:String?=null,
 
 
-    @ColumnInfo(name = "updated_at")
-    override val updatedAt: String? = null,
+    override val deletedBy:Long?=null,
+
+    override val deletedAt:String?=null,
 
 
-    @ColumnInfo(name = "deleted_at")
-    override val deletedAt: String? = null,
+    override val isDeleted:Int=0,
 
 
-    @ColumnInfo(name = "is_deleted")
-    override val isDeleted: Int = 0,
+    override val syncStatus:SyncStatus=SyncStatus.PENDING,
+
+    override val syncVersion:Int=1,
+
+    override val syncAt:String?=null,
+
+    override val deviceId:String?=null,
+
+    override val rowVersion:Int=1,
+
+    override val remarks:String?=null,
+
+    override val extraData:String?=null
 
 
-    @ColumnInfo(name = "sync_status")
-    override val syncStatus: SyncStatus = SyncStatus.PENDING,
-
-
-    @ColumnInfo(name = "sync_version")
-    override val syncVersion: Int = 1,
-
-
-    @ColumnInfo(name = "sync_at")
-    override val syncAt: String? = null,
-
-
-    @ColumnInfo(name = "device_id")
-    override val deviceId: String? = null,
-
-
-    @ColumnInfo(name = "row_version")
-    override val rowVersion: Int = 1,
-
-
-    @ColumnInfo(name = "remarks")
-    override val remarks: String? = null,
-
-
-    @ColumnInfo(name = "extra_data")
-    override val extraData: String? = null
-
-
-) : BaseEntity(
-
-    uuid = uuid,
-
-    createdBy = createdBy,
-    createdAt = createdAt,
-
-    updatedAt = updatedAt,
-
-    deletedAt = deletedAt,
-
-    isDeleted = isDeleted,
-
-    syncStatus = syncStatus,
-    syncVersion = syncVersion,
-    syncAt = syncAt,
-
-    deviceId = deviceId,
-
-    rowVersion = rowVersion,
-
-    remarks = remarks,
-    extraData = extraData
+):BaseEntity(
+    uuid,
+    createdBy,
+    createdAt,
+    updatedBy,
+    updatedAt,
+    deletedBy,
+    deletedAt,
+    isDeleted,
+    syncStatus,
+    syncVersion,
+    syncAt,
+    deviceId,
+    rowVersion,
+    remarks,
+    extraData
 )
