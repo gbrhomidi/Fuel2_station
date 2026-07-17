@@ -52,7 +52,10 @@ import infrastructure.persistence.entities.PumpNozzleEntity
         PaymentEntity::class,
         TankEntity::class,
         PumpEntity::class,
-        PumpNozzleEntity::class
+        PumpNozzleEntity::class , 
+        PartyEntity::class,
+        SalesTransactionEntity::class,
+        BankAccountEntity::class
     ],
     version = 2,
     exportSchema = true
