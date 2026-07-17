@@ -2,12 +2,9 @@ package infrastructure.persistence.model
 
 /**
  * Synchronization state persisted in SQLite as INTEGER.
- *
- * ADR-011:
- * Offline Optimistic Synchronization Contract.
+ * ADR-011: Offline Optimistic Synchronization Contract.
  *
  * Storage mapping:
- *
  * PENDING  = 0
  * SYNCING  = 1
  * SYNCED   = 2
@@ -15,28 +12,15 @@ package infrastructure.persistence.model
  *
  * Never store String values in database.
  */
-enum class SyncStatus(
-    val code: Int
-) {
-
+enum class SyncStatus(val code: Int) {
     PENDING(0),
-
     SYNCING(1),
-
     SYNCED(2),
-
     FAILED(3);
 
-
     companion object {
-
-        fun fromCode(
-            code: Int
-        ): SyncStatus {
-
-            return entries.firstOrNull {
-                it.code == code
-            } ?: FAILED
+        fun fromCode(code: Int): SyncStatus {
+            return entries.firstOrNull { it.code == code } ?: FAILED
         }
     }
 }
