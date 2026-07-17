@@ -1,12 +1,13 @@
 package infrastructure.persistence.entities
-import infrastructure.persistence.base.BaseEntity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import infrastructure.persistence.converters.SyncStatus
+import infrastructure.persistence.base.BaseEntity
+import infrastructure.persistence.types.SyncStatus
+import infrastructure.persistence.types.ScopeConstants
 
 @Entity(
     tableName = "role_permissions",
@@ -29,13 +30,16 @@ import infrastructure.persistence.converters.SyncStatus
             childColumns = ["station_id"],
             onDelete = ForeignKey.CASCADE
         )
-        // NOTE: branch_id is a logical scope identifier, not a database FK.
-        // It represents a business branch concept without a dedicated BranchEntity table.
     ],
     indices = [
         Index(value = ["uuid"], unique = true),
         Index(
-            value = ["role_id", "permission_id", "station_id"],
+            value = [
+                "role_id",
+                "permission_id",
+                "station_id",
+                "branch_id"
+            ],
             unique = true
         )
     ]
@@ -53,16 +57,31 @@ data class RolePermissionCrossRef(
     @ColumnInfo(name = "permission_id")
     val permissionId: Long = 0,
 
-    @ColumnInfo(name = "station_id")
-    val stationId: Long? = null,
+    /**
+     * Authorization scope: station level.
+     * GLOBAL_STATION_ID = global permission (all stations).
+     * FK to StationEntity for data integrity.
+     * 
+     * NOTE: Using sentinel value (0) instead of NULL to ensure
+     * UNIQUE constraint works correctly (SQLite NULL != NULL).
+     * Requires sentinel station record with id=0.
+     */
+    @ColumnInfo(
+        name = "station_id",
+        defaultValue = "0"
+    )
+    val stationId: Long = ScopeConstants.GLOBAL_STATION_ID,
 
     /**
-     * Logical scope identifier for business branch.
-     * Not a foreign key - no BranchEntity table exists.
-     * Used for multi-branch authorization scoping.
+     * Branch authorization scope.
+     * GLOBAL_BRANCH_ID = global branch (all branches).
+     * >0 = specific branch.
      */
-    @ColumnInfo(name = "branch_id")
-    val branchId: Long? = null,
+    @ColumnInfo(
+        name = "branch_id",
+        defaultValue = "0"
+    )
+    val branchId: Long = ScopeConstants.GLOBAL_BRANCH_ID,
 
     @ColumnInfo(name = "can_create")
     val canCreate: Int = 0,
@@ -108,7 +127,10 @@ data class RolePermissionCrossRef(
     override val isDeleted: Int = 0,
 
     // Sync
-    @ColumnInfo(name = "sync_status")
+    @ColumnInfo(
+        name = "sync_status",
+        defaultValue = "0"
+    )
     override val syncStatus: SyncStatus = SyncStatus.PENDING,
 
     @ColumnInfo(name = "sync_version")
@@ -120,6 +142,7 @@ data class RolePermissionCrossRef(
     @ColumnInfo(name = "device_id")
     override val deviceId: String? = null,
 
+    // Optimistic locking
     @ColumnInfo(name = "row_version")
     override val rowVersion: Int = 1,
 
