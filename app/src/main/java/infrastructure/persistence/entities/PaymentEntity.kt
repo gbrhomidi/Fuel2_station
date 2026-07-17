@@ -1,5 +1,4 @@
 package infrastructure.persistence.entities
-import infrastructure.persistence.base.BaseEntity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -7,8 +6,10 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import infrastructure.persistence.base.BaseEntity
 import infrastructure.persistence.converters.SyncConverters
 import infrastructure.persistence.types.SyncStatus
+
 
 @Entity(
     tableName = "payments",
@@ -44,16 +45,16 @@ import infrastructure.persistence.types.SyncStatus
         ),
 
         ForeignKey(
-            entity = BankAccountEntity::class,
+            entity = CashBoxEntity::class,
             parentColumns = ["id"],
-            childColumns = ["bank_account_id"],
+            childColumns = ["cash_box_id"],
             onDelete = ForeignKey.SET_NULL
         ),
 
         ForeignKey(
-            entity = CashBoxEntity::class,
+            entity = BankAccountEntity::class,
             parentColumns = ["id"],
-            childColumns = ["cash_box_id"],
+            childColumns = ["bank_account_id"],
             onDelete = ForeignKey.SET_NULL
         ),
 
@@ -69,20 +70,6 @@ import infrastructure.persistence.types.SyncStatus
             parentColumns = ["id"],
             childColumns = ["created_by"],
             onDelete = ForeignKey.RESTRICT
-        ),
-
-        ForeignKey(
-            entity = UserEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["updated_by"],
-            onDelete = ForeignKey.SET_NULL
-        ),
-
-        ForeignKey(
-            entity = UserEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["deleted_by"],
-            onDelete = ForeignKey.SET_NULL
         )
     ],
 
@@ -100,39 +87,54 @@ import infrastructure.persistence.types.SyncStatus
         ),
 
         Index(
-            value = ["cash_box_id", "is_deleted"]
+            value = [
+                "sale_id",
+                "is_deleted"
+            ]
         ),
 
         Index(
-            value = ["sale_id", "is_deleted"]
+            value = [
+                "cash_box_id",
+                "is_deleted"
+            ]
         ),
 
         Index(
-            value = ["customer_party_id"]
+            value = [
+                "customer_party_id"
+            ]
         ),
 
         Index(
-            value = ["created_at"]
+            value = [
+                "created_at"
+            ]
         ),
 
         Index(
-            value = ["status"]
+            value = [
+                "status"
+            ]
         )
     ]
 )
 
 
-@TypeConverters(SyncConverters::class)
+@TypeConverters(
+    SyncConverters::class
+)
 data class PaymentEntity(
 
-    /*
-     * Local SQLite identity only.
-     * Domain identity is UUID.
-     */
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
+    @PrimaryKey(
+        autoGenerate = true
+    )
     val id: Long = 0,
 
+
+    // =========================
+    // Identity
+    // =========================
 
     @ColumnInfo(name = "uuid")
     override val uuid: String,
@@ -141,6 +143,10 @@ data class PaymentEntity(
     @ColumnInfo(name = "payment_code")
     val paymentCode: String,
 
+
+    // =========================
+    // Relations
+    // =========================
 
     @ColumnInfo(name = "sale_id")
     val saleId: Long? = null,
@@ -154,6 +160,44 @@ data class PaymentEntity(
     val supplierPartyId: Long? = null,
 
 
+    @ColumnInfo(name = "currency_id")
+    val currencyId: Long? = null,
+
+
+    @ColumnInfo(name = "cash_box_id")
+    val cashBoxId: Long? = null,
+
+
+    @ColumnInfo(name = "bank_account_id")
+    val bankAccountId: Long? = null,
+
+
+    // =========================
+    // Money Contract ADR-012
+    // =========================
+
+    @ColumnInfo(name = "amount_minor")
+    val amountMinor: Long = 0,
+
+
+    @ColumnInfo(name = "currency_code")
+    val currencyCode: String = "SAR",
+
+
+    /**
+     * Exchange rate stored as scaled integer.
+     *
+     * Example:
+     * 3.750000 => 3750000
+     */
+    @ColumnInfo(name = "exchange_rate_scaled")
+    val exchangeRateScaled: Long = 1000000,
+
+
+    // =========================
+    // Payment Information
+    // =========================
+
     @ColumnInfo(name = "payment_type")
     val paymentType: String,
 
@@ -162,24 +206,8 @@ data class PaymentEntity(
     val paymentMethod: String,
 
 
-    @ColumnInfo(name = "amount")
-    val amount: Double = 0.0,
-
-
-    @ColumnInfo(name = "currency_id")
-    val currencyId: Long? = null,
-
-
-    @ColumnInfo(name = "exchange_rate")
-    val exchangeRate: Double = 1.0,
-
-
-    @ColumnInfo(name = "cash_box_id")
-    val cashBoxId: Long? = null,
-
-
     @ColumnInfo(name = "status")
-    val status: String = "completed",
+    val status: String = "COMPLETED",
 
 
     @ColumnInfo(name = "is_refund")
@@ -199,28 +227,27 @@ data class PaymentEntity(
 
 
     // =========================
-    // Audit Contract
+    // Audit
     // =========================
-
 
     @ColumnInfo(name = "created_by")
     override val createdBy: Long,
-
-
-    @ColumnInfo(name = "updated_by")
-    override val updatedBy: Long? = null,
-
-
-    @ColumnInfo(name = "deleted_by")
-    override val deletedBy: Long? = null,
 
 
     @ColumnInfo(name = "created_at")
     override val createdAt: String,
 
 
+    @ColumnInfo(name = "updated_by")
+    override val updatedBy: Long? = null,
+
+
     @ColumnInfo(name = "updated_at")
     override val updatedAt: String? = null,
+
+
+    @ColumnInfo(name = "deleted_by")
+    override val deletedBy: Long? = null,
 
 
     @ColumnInfo(name = "deleted_at")
@@ -232,12 +259,11 @@ data class PaymentEntity(
 
 
     // =========================
-    // Sync Contract
+    // Sync
     // =========================
 
-
     @ColumnInfo(name = "sync_status")
-    override val syncStatus: SyncStatus = SyncStatus.SYNCED,
+    override val syncStatus: SyncStatus = SyncStatus.PENDING,
 
 
     @ColumnInfo(name = "sync_version")
@@ -248,13 +274,21 @@ data class PaymentEntity(
     override val syncAt: String? = null,
 
 
+    @ColumnInfo(name = "device_id")
+    override val deviceId: String? = null,
+
+
+    // =========================
+    // Optimistic Lock
+    // =========================
+
     @ColumnInfo(name = "row_version")
     override val rowVersion: Int = 1,
 
 
-    @ColumnInfo(name = "device_id")
-    override val deviceId: String? = null,
-
+    // =========================
+    // Metadata
+    // =========================
 
     @ColumnInfo(name = "remarks")
     override val remarks: String? = null,
@@ -262,6 +296,7 @@ data class PaymentEntity(
 
     @ColumnInfo(name = "extra_data")
     override val extraData: String? = null
+
 
 ) : BaseEntity(
 
@@ -282,9 +317,9 @@ data class PaymentEntity(
     syncVersion = syncVersion,
     syncAt = syncAt,
 
-    rowVersion = rowVersion,
-
     deviceId = deviceId,
+
+    rowVersion = rowVersion,
 
     remarks = remarks,
     extraData = extraData
