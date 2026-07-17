@@ -8,8 +8,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import infrastructure.persistence.converters.SyncConverters
-import infrastructure.persistence.converters.SyncStatus
-
+import infrastructure.persistence.types.SyncStatus
 
 @Entity(
     tableName = "payments",
