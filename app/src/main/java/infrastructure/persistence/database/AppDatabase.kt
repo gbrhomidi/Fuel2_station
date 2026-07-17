@@ -11,10 +11,8 @@ import infrastructure.persistence.converters.MoneyConverters
 
 import infrastructure.persistence.migrations.Migration1To2
 
-// =============================
-// DAO Imports
-// =============================
 
+// DAOs
 import infrastructure.persistence.dao.CompanyDao
 import infrastructure.persistence.dao.CurrencyDao
 import infrastructure.persistence.dao.StationDao
@@ -29,16 +27,12 @@ import infrastructure.persistence.dao.PaymentDao
 import infrastructure.persistence.dao.TankDao
 import infrastructure.persistence.dao.PumpDao
 import infrastructure.persistence.dao.PumpNozzleDao
-
 import infrastructure.persistence.dao.PartyDao
 import infrastructure.persistence.dao.SalesTransactionDao
 import infrastructure.persistence.dao.BankAccountDao
 
 
-// =============================
-// Entity Imports
-// =============================
-
+// Entities
 import infrastructure.persistence.entities.CompanyEntity
 import infrastructure.persistence.entities.StationEntity
 import infrastructure.persistence.entities.CurrencyEntity
@@ -47,49 +41,41 @@ import infrastructure.persistence.entities.UserEntity
 import infrastructure.persistence.entities.RoleEntity
 import infrastructure.persistence.entities.PermissionEntity
 import infrastructure.persistence.entities.RolePermissionCrossRef
-
 import infrastructure.persistence.entities.CashBoxEntity
 import infrastructure.persistence.entities.ReceiptEntity
 import infrastructure.persistence.entities.PaymentEntity
-
 import infrastructure.persistence.entities.TankEntity
 import infrastructure.persistence.entities.PumpEntity
 import infrastructure.persistence.entities.PumpNozzleEntity
-
 import infrastructure.persistence.entities.PartyEntity
 import infrastructure.persistence.entities.SalesTransactionEntity
 import infrastructure.persistence.entities.BankAccountEntity
 
 
+
 @Database(
     entities = [
 
-        // Core
         CompanyEntity::class,
         StationEntity::class,
         CurrencyEntity::class,
         FuelTypeEntity::class,
 
-        // Security
         UserEntity::class,
         RoleEntity::class,
         PermissionEntity::class,
         RolePermissionCrossRef::class,
 
-
-        // Cash Management
         CashBoxEntity::class,
-        PaymentEntity::class,
         ReceiptEntity::class,
+        PaymentEntity::class,
 
-
-        // Fuel Infrastructure
         TankEntity::class,
         PumpEntity::class,
         PumpNozzleEntity::class,
 
 
-        // Business Domain
+        // Phase Financial Expansion
         PartyEntity::class,
         SalesTransactionEntity::class,
         BankAccountEntity::class
@@ -107,12 +93,9 @@ import infrastructure.persistence.entities.BankAccountEntity
     MoneyConverters::class
 )
 
+
 abstract class AppDatabase : RoomDatabase() {
 
-
-    // =============================
-    // Core DAOs
-    // =============================
 
     abstract fun companyDao(): CompanyDao
 
@@ -122,11 +105,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun fuelTypeDao(): FuelTypeDao
 
-
-
-    // =============================
-    // Security DAOs
-    // =============================
 
     abstract fun userDao(): UserDao
 
@@ -138,21 +116,13 @@ abstract class AppDatabase : RoomDatabase() {
 
 
 
-    // =============================
-    // Cash Management DAOs
-    // =============================
-
     abstract fun cashBoxDao(): CashBoxDao
-
-    abstract fun paymentDao(): PaymentDao
 
     abstract fun receiptDao(): ReceiptDao
 
+    abstract fun paymentDao(): PaymentDao
 
 
-    // =============================
-    // Fuel Infrastructure DAOs
-    // =============================
 
     abstract fun tankDao(): TankDao
 
@@ -162,9 +132,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 
 
-    // =============================
-    // Business Domain DAOs
-    // =============================
+    // Financial Domain DAOs
 
     abstract fun partyDao(): PartyDao
 
@@ -196,21 +164,16 @@ abstract class AppDatabase : RoomDatabase() {
 
                 val instance =
                     Room.databaseBuilder(
-
                         context.applicationContext,
-
                         AppDatabase::class.java,
-
                         DATABASE_NAME
-
                     )
+
 
                     .addMigrations(
                         Migration1To2()
                     )
 
-                    // Production safety:
-                    // No destructive migration
 
                     .build()
 
@@ -219,6 +182,7 @@ abstract class AppDatabase : RoomDatabase() {
                 INSTANCE = instance
 
                 instance
+
             }
         }
     }
