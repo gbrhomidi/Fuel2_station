@@ -1,6 +1,4 @@
 package infrastructure.persistence.entities
-import infrastructure.persistence.base.BaseEntity
-
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -8,10 +6,9 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-
-import com.example.app.data.converter.SyncConverters
-import com.example.app.data.model.SyncStatus
-
+import infrastructure.persistence.base.BaseEntity
+import infrastructure.persistence.converters.SyncConverters
+import infrastructure.persistence.types.SyncStatus
 
 
 @Entity(
@@ -26,7 +23,6 @@ import com.example.app.data.model.SyncStatus
             onDelete = ForeignKey.SET_NULL
         ),
 
-
         ForeignKey(
             entity = PaymentEntity::class,
             parentColumns = ["id"],
@@ -34,14 +30,12 @@ import com.example.app.data.model.SyncStatus
             onDelete = ForeignKey.SET_NULL
         ),
 
-
         ForeignKey(
             entity = CashBoxEntity::class,
             parentColumns = ["id"],
             childColumns = ["cash_box_id"],
             onDelete = ForeignKey.SET_NULL
         ),
-
 
         ForeignKey(
             entity = UserEntity::class,
@@ -64,11 +58,9 @@ import com.example.app.data.model.SyncStatus
             unique = true
         ),
 
-
         Index(
             value = ["payment_id"]
         ),
-
 
         Index(
             value = [
@@ -77,7 +69,6 @@ import com.example.app.data.model.SyncStatus
             ]
         ),
 
-
         Index(
             value = [
                 "customer_party_id",
@@ -85,9 +76,10 @@ import com.example.app.data.model.SyncStatus
             ]
         ),
 
-
         Index(
-            value = ["created_at"]
+            value = [
+                "created_at"
+            ]
         )
     ]
 )
@@ -96,35 +88,67 @@ import com.example.app.data.model.SyncStatus
 @TypeConverters(
     SyncConverters::class
 )
-
 data class ReceiptEntity(
 
-
-    @PrimaryKey(
-        autoGenerate = true
-    )
+    @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
 
+    // Identity
+
     @ColumnInfo(name = "uuid")
-    override val uuid: String?,
+    override val uuid: String,
 
 
     @ColumnInfo(name = "receipt_number")
     val receiptNumber: String,
 
 
+    // Relations
+
     @ColumnInfo(name = "customer_party_id")
-    val customerPartyId: Long?,
+    val customerPartyId: Long? = null,
 
 
     @ColumnInfo(name = "payment_id")
-    val paymentId: Long?,
+    val paymentId: Long? = null,
 
 
     @ColumnInfo(name = "cash_box_id")
-    val cashBoxId: Long?,
+    val cashBoxId: Long? = null,
 
+
+    @ColumnInfo(name = "currency_id")
+    val currencyId: Long? = null,
+
+
+    // Money Contract ADR-012
+
+    @ColumnInfo(name = "amount_minor")
+    val amountMinor: Long = 0,
+
+
+    @ColumnInfo(name = "currency_code")
+    val currencyCode: String = "SAR",
+
+
+    @ColumnInfo(name = "cash_amount_minor")
+    val cashAmountMinor: Long = 0,
+
+
+    @ColumnInfo(name = "cheque_amount_minor")
+    val chequeAmountMinor: Long = 0,
+
+
+    @ColumnInfo(name = "bank_amount_minor")
+    val bankAmountMinor: Long = 0,
+
+
+    @ColumnInfo(name = "other_amount_minor")
+    val otherAmountMinor: Long = 0,
+
+
+    // Receipt info
 
     @ColumnInfo(name = "receipt_type")
     val receiptType: String,
@@ -135,36 +159,11 @@ data class ReceiptEntity(
 
 
     @ColumnInfo(name = "received_by")
-    val receivedBy: Long?,
-
-
-    @ColumnInfo(name = "amount")
-    val amount: Double,
-
-
-    @ColumnInfo(name = "currency_id")
-    val currencyId: Long?,
-
-
-    @ColumnInfo(name = "cash_amount")
-    val cashAmount: Double = 0.0,
-
-
-    @ColumnInfo(name = "cheque_amount")
-    val chequeAmount: Double = 0.0,
-
-
-    @ColumnInfo(name = "bank_amount")
-    val bankAmount: Double = 0.0,
-
-
-    @ColumnInfo(name = "other_amount")
-    val otherAmount: Double = 0.0,
+    val receivedBy: Long? = null,
 
 
     @ColumnInfo(name = "status")
     val status: String = "ACTIVE",
-
 
 
     // Audit
@@ -177,9 +176,16 @@ data class ReceiptEntity(
     override val createdAt: String,
 
 
+    @ColumnInfo(name = "updated_by")
+    override val updatedBy: Long? = null,
+
 
     @ColumnInfo(name = "updated_at")
     override val updatedAt: String? = null,
+
+
+    @ColumnInfo(name = "deleted_by")
+    override val deletedBy: Long? = null,
 
 
     @ColumnInfo(name = "deleted_at")
@@ -188,7 +194,6 @@ data class ReceiptEntity(
 
     @ColumnInfo(name = "is_deleted")
     override val isDeleted: Int = 0,
-
 
 
     // Sync
@@ -209,20 +214,20 @@ data class ReceiptEntity(
     override val deviceId: String? = null,
 
 
+    // Lock
+
+    @ColumnInfo(name = "row_version")
+    override val rowVersion: Int = 1,
+
+
+    // Metadata
 
     @ColumnInfo(name = "remarks")
     override val remarks: String? = null,
 
 
     @ColumnInfo(name = "extra_data")
-    override val extraData: String? = null,
-
-
-    // Optimistic Lock
-
-    @ColumnInfo(name = "row_version")
-    override val rowVersion: Int = 1
-
+    override val extraData: String? = null
 
 
 ) : BaseEntity(
@@ -230,26 +235,24 @@ data class ReceiptEntity(
     uuid = uuid,
 
     createdBy = createdBy,
-
     createdAt = createdAt,
 
+    updatedBy = updatedBy,
     updatedAt = updatedAt,
 
+    deletedBy = deletedBy,
     deletedAt = deletedAt,
 
     isDeleted = isDeleted,
 
     syncStatus = syncStatus,
-
     syncVersion = syncVersion,
-
     syncAt = syncAt,
 
     deviceId = deviceId,
 
+    rowVersion = rowVersion,
+
     remarks = remarks,
-
-    extraData = extraData,
-
-    rowVersion = rowVersion
+    extraData = extraData
 )
