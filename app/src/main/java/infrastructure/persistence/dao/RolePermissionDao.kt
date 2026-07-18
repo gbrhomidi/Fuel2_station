@@ -30,7 +30,7 @@ interface RolePermissionDao {
 
     @Query("""
         SELECT *
-        FROM role_permission_cross_ref
+        FROM role_permissions
         WHERE id = :id
         AND is_deleted = 0
         LIMIT 1
@@ -43,7 +43,7 @@ interface RolePermissionDao {
 
     @Query("""
         SELECT *
-        FROM role_permission_cross_ref
+        FROM role_permissions
         WHERE role_id = :roleId
         AND is_deleted = 0
     """)
@@ -55,7 +55,7 @@ interface RolePermissionDao {
 
     @Query("""
         SELECT *
-        FROM role_permission_cross_ref
+        FROM role_permissions
         WHERE permission_id = :permissionId
         AND is_deleted = 0
     """)
@@ -67,7 +67,7 @@ interface RolePermissionDao {
 
     @Query("""
         SELECT *
-        FROM role_permission_cross_ref
+        FROM role_permissions
         WHERE role_id = :roleId
         AND permission_id = :permissionId
         AND is_deleted = 0
@@ -82,7 +82,7 @@ interface RolePermissionDao {
 
     @Query("""
         SELECT *
-        FROM role_permission_cross_ref
+        FROM role_permissions
         WHERE is_deleted = 0
     """)
     suspend fun findAll(): List<RolePermissionCrossRef>
@@ -90,7 +90,7 @@ interface RolePermissionDao {
 
 
     @Query("""
-        UPDATE role_permission_cross_ref
+        UPDATE role_permissions
         SET is_deleted = 1,
             deleted_at = datetime('now')
         WHERE id = :id
