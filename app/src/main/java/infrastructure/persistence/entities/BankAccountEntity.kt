@@ -6,7 +6,6 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-
 import infrastructure.persistence.base.BaseEntity
 import infrastructure.persistence.converters.SyncConverters
 import infrastructure.persistence.types.SyncStatus
@@ -40,10 +39,11 @@ import infrastructure.persistence.types.SyncStatus
         ),
 
         Index(
-            value = ["is_deleted"]
+            value = ["created_by"]
         )
     ]
 )
+
 
 @TypeConverters(
     SyncConverters::class
@@ -51,17 +51,14 @@ import infrastructure.persistence.types.SyncStatus
 
 data class BankAccountEntity(
 
+
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
 
-    // Identity
-
     @ColumnInfo(name = "uuid")
     override val uuid: String,
 
-
-    // Bank Information
 
     @ColumnInfo(name = "account_number")
     val accountNumber: String,
@@ -71,48 +68,48 @@ data class BankAccountEntity(
     val bankName: String,
 
 
-    // Currency
-
     @ColumnInfo(name = "currency_id")
     val currencyId: Long? = null,
+
+
+    /**
+     * ADR-012
+     * Money stored as minor units
+     */
+    @ColumnInfo(name = "balance_minor")
+    val balanceMinor: Long = 0,
 
 
     @ColumnInfo(name = "currency_code")
     val currencyCode: String = "SAR",
 
 
-    // ADR-012 Financial Precision
-    // Stored as minor units to avoid floating point errors
 
-    @ColumnInfo(name = "balance_minor")
-    val balanceMinor: Long = 0,
+    // =====================
+    // Audit + Sync inherited
+    // =====================
 
-
-    // Audit
 
     override val createdBy: Long,
+
 
     override val createdAt: String,
 
 
     override val updatedBy: Long? = null,
 
+
     override val updatedAt: String? = null,
 
 
-    // Soft Delete
-    // SQLite representation:
-    // 0 = Active
-    // 1 = Deleted
-
-    override val isDeleted: Int = 0,
-
     override val deletedBy: Long? = null,
+
 
     override val deletedAt: String? = null,
 
 
-    // Synchronization
+    override val isDeleted: Int = 0,
+
 
     override val syncStatus: SyncStatus = SyncStatus.PENDING,
 
@@ -126,12 +123,8 @@ data class BankAccountEntity(
     override val deviceId: String? = null,
 
 
-    // Optimistic Locking
-
     override val rowVersion: Int = 1,
 
-
-    // Extra Metadata
 
     override val remarks: String? = null,
 
@@ -143,21 +136,19 @@ data class BankAccountEntity(
 
     uuid = uuid,
 
-
     createdBy = createdBy,
+
     createdAt = createdAt,
 
-
     updatedBy = updatedBy,
+
     updatedAt = updatedAt,
 
-
     deletedBy = deletedBy,
+
     deletedAt = deletedAt,
 
-
     isDeleted = isDeleted,
-
 
     syncStatus = syncStatus,
 
@@ -167,9 +158,7 @@ data class BankAccountEntity(
 
     deviceId = deviceId,
 
-
     rowVersion = rowVersion,
-
 
     remarks = remarks,
 
