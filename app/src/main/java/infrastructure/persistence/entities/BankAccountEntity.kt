@@ -59,9 +59,6 @@ data class BankAccountEntity(
     val currencyId:Long? = null,
 
 
-    @ColumnInfo(name = "is_deleted")
-    val isDeleted: Boolean = false,
-    
     // ADR-012
 
     @ColumnInfo(name="balance_minor")
