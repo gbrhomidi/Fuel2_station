@@ -10,7 +10,7 @@ import infrastructure.persistence.types.SyncStatus
 
 
 @Entity(
-    tableName = "role_permission_cross_ref",
+    tableName = "role_permissions",
 
     foreignKeys = [
 
