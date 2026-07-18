@@ -35,7 +35,8 @@ import infrastructure.persistence.types.SyncStatus
         Index(
             value = [
                 "role_id",
-                "permission_id"
+                "permission_id", 
+                "station_id"
             ],
             unique = true
         ),
