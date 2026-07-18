@@ -45,8 +45,8 @@ data class PartyEntity(
     val partyType: String = "CUSTOMER",
 
 
-    @ColumnInfo(name = "credit_limit")
-    val creditLimit: Double = 0.0,
+    @ColumnInfo(name = "credit_limit_minor")
+    val creditLimitMinor: Long = 0,
 
 
     @ColumnInfo(name = "created_by")
