@@ -9,9 +9,6 @@ import androidx.room.TypeConverters
 import infrastructure.persistence.converters.SyncConverters
 import infrastructure.persistence.converters.MoneyConverters
 
-import infrastructure.persistence.migrations.Migration1To2
-import infrastructure.persistence.migrations.Migration2To3
-
 
 // DAOs
 import infrastructure.persistence.dao.CompanyDao
@@ -171,12 +168,21 @@ abstract class AppDatabase : RoomDatabase() {
                     )
 
 
-                    .addMigrations(
-                     Migration1To2(),
-                     Migration2To3()
-                    )
-
-                    .build()
+                    /*
+ * Development Mode
+ *
+ * The application is still under active development.
+ * No production users exist yet.
+ *
+ * Therefore destructive migrations are enabled.
+ *
+ * Before the first production release:
+ * - Remove fallbackToDestructiveMigration()
+ * - Implement real Migration classes.
+ */
+.fallbackToDestructiveMigration()
+.fallbackToDestructiveMigrationOnDowngrade()
+.build()
 
 
 
