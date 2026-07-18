@@ -10,6 +10,7 @@ import infrastructure.persistence.converters.SyncConverters
 import infrastructure.persistence.converters.MoneyConverters
 
 import infrastructure.persistence.migrations.Migration1To2
+import infrastructure.persistence.migrations.Migration2To3
 
 
 // DAOs
@@ -82,7 +83,7 @@ import infrastructure.persistence.entities.BankAccountEntity
 
     ],
 
-    version = 2,
+    version = 3,
 
     exportSchema = true
 )
@@ -171,9 +172,9 @@ abstract class AppDatabase : RoomDatabase() {
 
 
                     .addMigrations(
-                        Migration1To2()
+                     Migration1To2(),
+                     Migration2To3()
                     )
-
 
                     .build()
 
