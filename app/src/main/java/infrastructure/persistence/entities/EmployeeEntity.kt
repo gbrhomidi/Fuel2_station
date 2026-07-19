@@ -5,72 +5,84 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "companies")
-data class CompanyEntity(
+@Entity(tableName = "employees")
+data class EmployeeEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val company_code: String,
+    val employee_code: String,
+    val party_id: Int?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val company_name: String,
+    val full_name: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val company_name_ar: String?,
+    val full_name_ar: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val trade_name: String?,
+    val national_id: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val legal_form: String?,
+    val passport_number: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val tax_number: String?,
+    val nationality: String?,
+    val birth_date: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val commercial_register: String?,
+    val gender: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val license_number: String?,
+    val marital_status: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     val phone: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     val phone2: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     val email: String?,
+    val address: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val website: String?,
+    val emergency_contact: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val fax: String?,
+    val emergency_phone: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val country: String?,
+    val department: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val city: String?,
+    val job_title: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val district: String?,
+    val job_title_ar: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val street: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val building: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val postal_code: String?,
+    val employment_type: String? = "full_time",
+    val hire_date: String,
+    val termination_date: String?,
+    val termination_reason: String?,
+    val station_id: Int?,
+    val branch_id: Int?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val latitude: Double?,
+    val basic_salary: Double? = 0,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val longitude: Double?,
+    val housing_allowance: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val transport_allowance: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val food_allowance: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val other_allowances: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val total_salary: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val insurance_deduction: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val tax_deduction: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val other_deductions: Double? = 0,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val logo_path: String?,
+    val bank_name: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val header_image: String?,
+    val bank_account: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val footer_image: String?,
-    val default_currency_id: Int?,
-    val fiscal_year_start: String?,
-    val fiscal_year_end: String?,
+    val contract_path: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val timezone: String? = "UTC",
+    val id_doc_path: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val date_format: String? = "YYYY-MM-DD",
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val language: String? = "ar",
+    val photo_path: String?,
+    val user_id: Int?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     val status: String? = "active",
-    val is_head_office: Int? = 0,
-    val parent_company_id: Int?,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
     val deleted_at: String?,

@@ -5,24 +5,35 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "currencies")
-data class CurrencyEntity(
+@Entity(tableName = "accounts")
+data class AccountEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_code: String,
+    val account_code: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_name: String,
+    val account_name: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_name_ar: String?,
+    val account_name_ar: String?,
+    val parent_account_id: Int?,
+    val level: Int,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val symbol: String?,
+    val account_type: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val symbol_position: String? = "after",
-    val decimal_places: Int? = 2,
-    val is_default: Int? = 0,
+    val account_category: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val normal_balance: String,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val opening_balance: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val current_balance: Double? = 0,
+    val is_bank_account: Int? = 0,
+    val is_cash_account: Int? = 0,
+    val is_control_account: Int? = 0,
     val is_active: Int? = 1,
+    val bank_account_id: Int?,
+    val cash_box_id: Int?,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
     val deleted_at: String?,

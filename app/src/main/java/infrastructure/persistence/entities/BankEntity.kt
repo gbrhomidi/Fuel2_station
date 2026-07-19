@@ -5,37 +5,34 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "currencies")
-data class CurrencyEntity(
+@Entity(tableName = "banks")
+data class BankEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_code: String,
+    val bank_code: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_name: String,
+    val bank_name: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_name_ar: String?,
+    val bank_name_ar: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val symbol: String?,
+    val swift_code: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val symbol_position: String? = "after",
-    val decimal_places: Int? = 2,
-    val is_default: Int? = 0,
+    val country: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val city: String?,
+    val address: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val phone: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val email: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val website: String?,
     val is_active: Int? = 1,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
-    val deleted_at: String?,
-    val created_by: Int?,
-    val updated_by: Int?,
-    val deleted_by: Int?,
     val is_deleted: Int? = 0,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val sync_status: String? = "synced",
-    val sync_version: Int? = 1,
-    val sync_at: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val device_id: String?,
     val remarks: String?,
     val extra_data: String?
 )

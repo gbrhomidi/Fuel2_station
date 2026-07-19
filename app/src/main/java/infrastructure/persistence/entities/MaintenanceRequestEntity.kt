@@ -5,38 +5,52 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "bank_accounts")
-data class BankAccountEntity(
+@Entity(tableName = "maintenance_requests")
+data class MaintenanceRequestEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val account_code: String,
-    val bank_id: Int,
-    val company_id: Int?,
-    val station_id: Int?,
+    val request_code: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val account_name: String,
+    val asset_type: String,
+    val asset_id: Int,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val account_name_ar: String?,
+    val request_type: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val account_number: String,
+    val priority: String? = "medium",
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val iban: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val account_type: String? = "current",
-    val currency_id: Int?,
+    val title: String,
+    val description: String,
+    val description_ar: String?,
+    val symptoms: String?,
+    val error_codes: String?,
+    val reported_by: Int,
+    val reported_at: String? = "CURRENT_TIMESTAMP",
+    val assigned_to: Int?,
+    val assigned_at: String?,
+    val scheduled_date: String?,
+    val scheduled_time: String?,
+    val estimated_duration: Int?,
+    val started_at: String?,
+    val completed_at: String?,
+    val actual_duration: Int?,
+    val resolution: String?,
+    val resolution_ar: String?,
+    val parts_used: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val opening_balance: Double? = 0,
+    val labor_cost: Double? = 0,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val current_balance: Double? = 0,
+    val parts_cost: Double? = 0,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val available_balance: Double? = 0,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val overdraft_limit: Double? = 0,
-    val authorized_users: String?,
+    val total_cost: Double? = 0,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val status: String? = "active",
+    val status: String? = "open",
+    val approved_by: Int?,
+    val approved_at: String?,
+    val before_photos: String?,
+    val after_photos: String?,
+    val station_id: Int,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
     val deleted_at: String?,

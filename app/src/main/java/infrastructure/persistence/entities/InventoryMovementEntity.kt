@@ -5,37 +5,45 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "fuel_types")
-data class FuelTypeEntity(
+@Entity(tableName = "inventory_movements")
+data class InventoryMovementEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val fuel_code: String,
+    val movement_code: String,
+    val product_id: Int,
+    val station_id: Int,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val fuel_name: String,
+    val movement_type: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val fuel_name_ar: String?,
-    val description: String?,
+    val movement_subtype: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val density_standard: Double?,
+    val quantity_before: Double,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val temperature_standard: Double? = 15.0,
+    val quantity_change: Double,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val flash_point: Double?,
+    val quantity_after: Double,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val default_sale_price: Double?,
+    val unit_cost: Double?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val default_purchase_price: Double?,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val tax_rate: Double? = 0,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val vat_rate: Double? = 0,
+    val total_cost: Double?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val color_code: String?,
+    val reference_type: String?,
+    val reference_id: Int?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val icon_path: String?,
-    val is_active: Int? = 1,
+    val reference_code: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val from_location: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val to_location: String?,
+    val reason: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val reason_code: String?,
+    val performed_by: Int,
+    val approved_by: Int?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val status: String? = "completed",
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
     val deleted_at: String?,

@@ -5,37 +5,45 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "fuel_types")
-data class FuelTypeEntity(
+@Entity(tableName = "meter_readings")
+data class MeterReadingEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val fuel_code: String,
+    val reading_code: String,
+    val pump_id: Int,
+    val nozzle_id: Int,
+    val station_id: Int,
+    val shift_id: Int?,
+    val reading_date: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val fuel_name: String,
+    val period: String? = "morning",
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val opening_reading: Double,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val closing_reading: Double,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val sold_liters: Double,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val system_sold_liters: Double?,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val difference: Double?,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val difference_percent: Double?,
+    val is_balanced: Int? = 1,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val tolerance_limit: Double? = 0.5,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val adjustment_amount: Double? = 0,
+    val adjustment_reason: String?,
+    val adjusted_by: Int?,
+    val read_by: Int,
+    val verified_by: Int?,
+    val approved_by: Int?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val fuel_name_ar: String?,
-    val description: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val density_standard: Double?,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val temperature_standard: Double? = 15.0,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val flash_point: Double?,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val default_sale_price: Double?,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val default_purchase_price: Double?,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val tax_rate: Double? = 0,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val vat_rate: Double? = 0,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val color_code: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val icon_path: String?,
-    val is_active: Int? = 1,
+    val status: String? = "draft",
+    val rejection_reason: String?,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
     val deleted_at: String?,

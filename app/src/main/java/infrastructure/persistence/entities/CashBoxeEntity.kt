@@ -5,24 +5,30 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "currencies")
-data class CurrencyEntity(
+@Entity(tableName = "cash_boxes")
+data class CashBoxeEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_code: String,
+    val box_code: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_name: String,
+    val box_name: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val currency_name_ar: String?,
+    val box_name_ar: String?,
+    val station_id: Int,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val symbol: String?,
+    val box_type: String? = "main",
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val opening_balance: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val current_balance: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val maximum_balance: Double? = 500000,
+    val currency_id: Int?,
+    val responsible_user_id: Int?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val symbol_position: String? = "after",
-    val decimal_places: Int? = 2,
-    val is_default: Int? = 0,
-    val is_active: Int? = 1,
+    val status: String? = "active",
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
     val deleted_at: String?,
