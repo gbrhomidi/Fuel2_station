@@ -5,47 +5,30 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "receipts")
-data class ReceiptEntity(
+@Entity(tableName = "product_categories")
+data class ProductCategoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val receipt_number: String,
-    val customer_party_id: Int?,
-    val payment_id: Int?,
+    val category_code: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val receipt_type: String,
+    val category_name: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val received_from: String,
+    val category_name_ar: String?,
+    val description: String?,
+    val description_ar: String?,
+    val parent_category_id: Int?,
+    val level: Int? = 1,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val received_from_ar: String?,
-    val received_by: Int,
-    val accountant_id: Int?,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val amount: Double,
-    val currency_id: Int?,
-    val amount_in_words: String?,
-    val amount_in_words_ar: String?,
-    val purpose: String?,
-    val purpose_ar: String?,
+    val category_type: String? = "product",
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val reference_document: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val cash_amount: Double? = 0,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val cheque_amount: Double? = 0,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val bank_amount: Double? = 0,
-    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val other_amount: Double? = 0,
-    val cash_box_id: Int?,
+    val color_code: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val status: String? = "active",
-    val void_reason: String?,
-    val voided_by: Int?,
-    val voided_at: String?,
-    val print_count: Int? = 0,
+    val icon_path: String?,
+    val display_order: Int? = 0,
+    val tax_rate: Double? = 0.0,
+    val is_active: Int? = 1,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
     val deleted_at: String?,

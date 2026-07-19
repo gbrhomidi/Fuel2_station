@@ -5,41 +5,42 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "pump_nozzles")
-data class PumpNozzleEntity(
+@Entity(tableName = "tank_level_log")
+data class TankLevelLogEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
+    val tank_id: Int,
+    val reading_date: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val nozzle_code: String,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val nozzle_number: String,
-    val pump_id: Int,
-    val fuel_type_id: Int,
+    val reading_type: String? = "auto",
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val meter_start: Double? = 0,
+    val opening_level: Double?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val meter_current: Double? = 0,
-    val meter_last_reset: String?,
+    val closing_level: Double?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val total_sold_liters: Double? = 0,
-    val calibration_date: String?,
+    val measured_level: Double?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val calibration_factor: Double? = 1.0,
+    val calculated_level: Double?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val accuracy_percentage: Double? = 100.0,
+    val difference: Double?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val hose_length: Double?,
-    val auto_stop_enabled: Int? = 1,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val status: String? = "active",
+    val fuel_temperature: Double?,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val fuel_density: Double?,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val volume_at_15c: Double?,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val refills_total: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val sales_total: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val evaporation_loss: Double? = 0,
+    val is_below_minimum: Int? = 0,
+    val is_near_maximum: Int? = 0,
+    val alert_triggered: Int? = 0,
     val created_at: String? = "CURRENT_TIMESTAMP",
-    val updated_at: String? = "CURRENT_TIMESTAMP",
-    val deleted_at: String?,
     val created_by: Int?,
-    val updated_by: Int?,
-    val deleted_by: Int?,
-    val is_deleted: Int? = 0,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     val sync_status: String? = "synced",
     val sync_version: Int? = 1,

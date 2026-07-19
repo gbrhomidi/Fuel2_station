@@ -5,30 +5,24 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "permissions")
-data class PermissionEntity(
+@Entity(tableName = "sync_devices")
+data class SyncDeviceEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_code: String,
+    val device_id: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_name: String,
+    val device_name: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_name_ar: String?,
-    val description: String?,
+    val device_type: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val module: String,
+    val os_version: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val module_name_ar: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val action: String,
-    val requires_station: Int? = 0,
-    val requires_branch: Int? = 0,
+    val app_version: String?,
+    val station_id: Int?,
+    val last_sync_at: String?,
     val is_active: Int? = 1,
     val created_at: String? = "CURRENT_TIMESTAMP",
-    val updated_at: String? = "CURRENT_TIMESTAMP",
-    val is_deleted: Int? = 0,
-    val remarks: String?,
-    val extra_data: String?
+    val updated_at: String? = "CURRENT_TIMESTAMP"
 )

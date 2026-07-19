@@ -5,67 +5,65 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "payments")
-data class PaymentEntity(
+@Entity(tableName = "vehicles")
+data class VehicleEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val payment_code: String,
-    val sale_id: Int?,
-    val customer_party_id: Int?,
-    val supplier_party_id: Int?,
+    val vehicle_code: String,
+    val party_id: Int,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val payment_type: String,
+    val plate_number: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val payment_method: String,
+    val plate_number_ar: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val plate_country: String? = "Yemen",
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val plate_city: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val vehicle_type: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val brand: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val model: String?,
+    val year: Int?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val color: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val engine_type: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val amount: Double,
-    val currency_id: Int?,
+    val engine_capacity: Double?,
+    val fuel_type_id: Int?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val exchange_rate: Double? = 1,
+    val tank_capacity: Double?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val chassis_number: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val engine_number: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val registration_number: String?,
+    val registration_expiry: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val insurance_number: String?,
+    val insurance_expiry: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val rfid_tag: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val nfc_tag: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val amount_in_default: Double?,
-    val is_partial: Int? = 0,
+    val current_odometer: Double? = 0,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val total_invoice_amount: Double?,
+    val last_odometer: Double? = 0,
+    val odometer_updated_at: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.REAL)
-    val remaining_after: Double?,
+    val avg_consumption: Double?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val cheque_number: String?,
-    val cheque_date: String?,
+    val status: String? = "active",
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val cheque_bank: String?,
+    val vehicle_photo: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val cheque_branch: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val cheque_status: String? = "pending",
-    val bank_account_id: Int?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val transfer_reference: String?,
-    val transfer_date: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val card_last_four: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val card_type: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val auth_code: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val terminal_id: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val mobile_provider: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val mobile_number: String?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val transaction_id: String?,
-    val cash_box_id: Int?,
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val status: String? = "completed",
-    val is_refund: Int? = 0,
-    val original_payment_id: Int?,
-    val refund_reason: String?,
-    val operator: String? = "System",
-    val notes: String?,
+    val registration_doc: String?,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
     val deleted_at: String?,

@@ -5,30 +5,33 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "permissions")
-data class PermissionEntity(
+@Entity(tableName = "printer_profiles")
+data class PrinterProfileEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_code: String,
+    val profile_code: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_name: String,
+    val profile_name: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_name_ar: String?,
-    val description: String?,
+    val printer_name: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val module: String,
+    val printer_type: String? = "thermal",
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val module_name_ar: String?,
+    val connection_type: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val action: String,
-    val requires_station: Int? = 0,
-    val requires_branch: Int? = 0,
+    val ip_address: String?,
+    val port: Int?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val mac_address: String?,
+    val paper_width: Int?,
+    val paper_height: Int?,
+    val dpi: Int? = 203,
+    val driver_settings: String?,
+    val is_default: Int? = 0,
     val is_active: Int? = 1,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
-    val is_deleted: Int? = 0,
-    val remarks: String?,
-    val extra_data: String?
+    val created_by: Int?
 )

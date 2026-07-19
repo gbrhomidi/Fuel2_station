@@ -5,30 +5,28 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-@Entity(tableName = "permissions")
-data class PermissionEntity(
+@Entity(tableName = "smart_alerts")
+data class SmartAlertEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val uuid: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_code: String,
+    val alert_code: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_name: String,
+    val alert_name: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val permission_name_ar: String?,
+    val alert_name_ar: String?,
     val description: String?,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val module: String,
+    val severity: String? = "warning",
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val module_name_ar: String?,
+    val condition_type: String,
+    val condition_config: String,
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    val action: String,
-    val requires_station: Int? = 0,
-    val requires_branch: Int? = 0,
+    val entity_type: String?,
     val is_active: Int? = 1,
+    val trigger_action: String?,
     val created_at: String? = "CURRENT_TIMESTAMP",
     val updated_at: String? = "CURRENT_TIMESTAMP",
-    val is_deleted: Int? = 0,
-    val remarks: String?,
-    val extra_data: String?
+    val created_by: Int?
 )

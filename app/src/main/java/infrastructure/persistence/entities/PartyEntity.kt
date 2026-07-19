@@ -1,124 +1,83 @@
-package infrastructure.persistence.entities
+package infrastructure.persistence.entity
 
-import androidx.room.*
-import infrastructure.persistence.base.BaseEntity
-import infrastructure.persistence.types.SyncStatus
-
-
-@Entity(
-    tableName = "parties",
-    indices = [
-        Index(value = ["uuid"], unique = true),
-        Index(value = ["party_code"], unique = true),
-        Index(value = ["party_type"]),
-        Index(value = ["is_deleted"])
-    ]
-)
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
+@Entity(tableName = "parties")
 data class PartyEntity(
-
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Long = 0,
-
-
-    @ColumnInfo(name = "uuid")
-    override val uuid: String,
-
-
-    @ColumnInfo(name = "party_code")
-    val partyCode: String,
-
-
-    @ColumnInfo(name = "name")
-    val name: String,
-
-
-    @ColumnInfo(name = "phone")
-    val phone: String? = null,
-
-
-    @ColumnInfo(name = "address")
-    val address: String? = null,
-
-
-    @ColumnInfo(name = "party_type")
-    val partyType: String = "CUSTOMER",
-
-
-    @ColumnInfo(name = "credit_limit_minor")
-    val creditLimitMinor: Long = 0,
-
-
-    @ColumnInfo(name = "created_by")
-    override val createdBy: Long,
-
-
-    @ColumnInfo(name = "created_at")
-    override val createdAt: String,
-
-
-    @ColumnInfo(name = "updated_by")
-    override val updatedBy: Long? = null,
-
-
-    @ColumnInfo(name = "updated_at")
-    override val updatedAt: String? = null,
-
-
-    @ColumnInfo(name = "deleted_by")
-    override val deletedBy: Long? = null,
-
-
-    @ColumnInfo(name = "deleted_at")
-    override val deletedAt: String? = null,
-
-
-    @ColumnInfo(name = "is_deleted")
-    override val isDeleted: Int = 0,
-
-
-    @ColumnInfo(name = "sync_status")
-    override val syncStatus: SyncStatus = SyncStatus.PENDING,
-
-
-    @ColumnInfo(name = "sync_version")
-    override val syncVersion: Int = 1,
-
-
-    @ColumnInfo(name = "sync_at")
-    override val syncAt: String? = null,
-
-
-    @ColumnInfo(name = "device_id")
-    override val deviceId: String? = null,
-
-
-    @ColumnInfo(name = "row_version")
-    override val rowVersion: Int = 1,
-
-
-    @ColumnInfo(name = "remarks")
-    override val remarks: String? = null,
-
-
-    @ColumnInfo(name = "extra_data")
-    override val extraData: String? = null
-
-): BaseEntity(
-
-    uuid,
-    createdBy,
-    createdAt,
-    updatedBy,
-    updatedAt,
-    deletedBy,
-    deletedAt,
-    isDeleted,
-    syncStatus,
-    syncVersion,
-    syncAt,
-    deviceId,
-    rowVersion,
-    remarks,
-    extraData
+    val id: Int,
+    val uuid: String,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val party_code: String,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val barcode: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val qr_code: String?,
+    val party_type_id: Int,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val legal_name: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val commercial_name: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val commercial_name_ar: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val tax_number: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val commercial_register: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val vat_number: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val credit_limit: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val current_balance: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val total_purchases: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val total_payments: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val total_due: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val overdue_amount: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val payment_terms: String?,
+    val currency_id: Int?,
+    val loyalty_points: Int? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val loyalty_tier: String? = "bronze",
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val risk_level: String? = "low",
+    val blacklist_reason: String?,
+    val blacklist_date: String?,
+    val blacklist_by: Int?,
+    val referred_by: Int?,
+    val assigned_to: Int?,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val rating: Double? = 3.00,
+    val total_orders: Int? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val total_order_amount: Double? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+    val on_time_rate: Double? = 100.00,
+    val fuel_type_preference_id: Int?,
+    val fleet_size: Int? = 0,
+    val is_active: Int? = 1,
+    val notes: String?,
+    val created_at: String? = "CURRENT_TIMESTAMP",
+    val updated_at: String? = "CURRENT_TIMESTAMP",
+    val deleted_at: String?,
+    val created_by: Int?,
+    val updated_by: Int?,
+    val deleted_by: Int?,
+    val is_deleted: Int? = 0,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val sync_status: String? = "synced",
+    val sync_version: Int? = 1,
+    val sync_at: String?,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    val device_id: String?,
+    val remarks: String?,
+    val extra_data: String?
 )
