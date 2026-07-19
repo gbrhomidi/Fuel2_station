@@ -1,80 +1,50 @@
 package infrastructure.persistence.dao
 
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
-import infrastructure.persistence.entities.RoleEntity
+import androidx.room.*
+
+
+import infrastructure.persistence.entity.RoleEntity
 
 
 
 @Dao
-interface RoleDao {
+interface RolesDao {
 
 
-    @Insert(
-        onConflict = OnConflictStrategy.ABORT
-    )
+
+    @Insert
     suspend fun insert(
-        role: RoleEntity
-    ): Long
+        entity: RoleEntity
+    )
+
+
+
+    @Insert
+    suspend fun insertAll(
+        entities: List<RoleEntity>
+    )
 
 
 
     @Update
     suspend fun update(
-        role: RoleEntity
+        entity: RoleEntity
     )
 
 
 
-    @Query("""
-        SELECT *
-        FROM roles
-        WHERE id = :id
-        AND is_deleted = 0
-        LIMIT 1
-    """)
-    suspend fun findById(
-        id: Long
-    ): RoleEntity?
-
-
-
-    @Query("""
-        SELECT *
-        FROM roles
-        WHERE role_code = :code
-        AND is_deleted = 0
-        LIMIT 1
-    """)
-    suspend fun findByCode(
-        code: String
-    ): RoleEntity?
-
-
-
-    @Query("""
-        SELECT *
-        FROM roles
-        WHERE is_deleted = 0
-        ORDER BY level ASC, role_name ASC
-    """)
-    suspend fun findAll():
-            List<RoleEntity>
-
-
-
-    @Query("""
-        UPDATE roles
-        SET is_deleted = 1,
-            deleted_at = datetime('now')
-        WHERE id = :id
-    """)
-    suspend fun softDelete(
-        id: Long
+    @Delete
+    suspend fun delete(
+        entity: RoleEntity
     )
+
+
+
+    @Query("SELECT * FROM roles")
+    suspend fun getAll():
+        List<RoleEntity>
+
+
 
 }

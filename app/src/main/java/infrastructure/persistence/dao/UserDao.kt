@@ -1,15 +1,50 @@
 package infrastructure.persistence.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import infrastructure.persistence.entities.UserEntity
+
+import androidx.room.*
+
+
+import infrastructure.persistence.entity.UserEntity
+
+
 
 @Dao
-interface UserDao {
-    @Insert
-    suspend fun insert(user: UserEntity): Long
+interface UsersDao {
 
-    @Query("SELECT id, username, is_deleted FROM users WHERE id = :id LIMIT 1")
-    suspend fun findById(id: Long): UserEntity?
+
+
+    @Insert
+    suspend fun insert(
+        entity: UserEntity
+    )
+
+
+
+    @Insert
+    suspend fun insertAll(
+        entities: List<UserEntity>
+    )
+
+
+
+    @Update
+    suspend fun update(
+        entity: UserEntity
+    )
+
+
+
+    @Delete
+    suspend fun delete(
+        entity: UserEntity
+    )
+
+
+
+    @Query("SELECT * FROM users")
+    suspend fun getAll():
+        List<UserEntity>
+
+
+
 }

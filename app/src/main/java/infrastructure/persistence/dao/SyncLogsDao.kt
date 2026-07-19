@@ -4,46 +4,46 @@ package infrastructure.persistence.dao
 import androidx.room.*
 
 
-import infrastructure.persistence.entity.StationEntity
+import infrastructure.persistence.entity.SyncLogEntity
 
 
 
 @Dao
-interface StationsDao {
+interface SyncLogsDao {
 
 
 
     @Insert
     suspend fun insert(
-        entity: StationEntity
+        entity: SyncLogEntity
     )
 
 
 
     @Insert
     suspend fun insertAll(
-        entities: List<StationEntity>
+        entities: List<SyncLogEntity>
     )
 
 
 
     @Update
     suspend fun update(
-        entity: StationEntity
+        entity: SyncLogEntity
     )
 
 
 
     @Delete
     suspend fun delete(
-        entity: StationEntity
+        entity: SyncLogEntity
     )
 
 
 
-    @Query("SELECT * FROM stations")
+    @Query("SELECT * FROM sync_logs")
     suspend fun getAll():
-        List<StationEntity>
+        List<SyncLogEntity>
 
 
 
