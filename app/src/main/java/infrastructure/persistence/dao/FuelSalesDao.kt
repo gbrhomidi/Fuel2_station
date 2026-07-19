@@ -4,46 +4,46 @@ package infrastructure.persistence.dao
 import androidx.room.*
 
 
-import infrastructure.persistence.entity.CashBoxeEntity
+import infrastructure.persistence.entity.FuelSaleEntity
 
 
 
 @Dao
-interface CashBoxDao {
+interface FuelSalesDao {
 
 
 
     @Insert
     suspend fun insert(
-        entity: CashBoxeEntity
+        entity: FuelSaleEntity
     )
 
 
 
     @Insert
     suspend fun insertAll(
-        entities: List<CashBoxeEntity>
+        entities: List<FuelSaleEntity>
     )
 
 
 
     @Update
     suspend fun update(
-        entity: CashBoxeEntity
+        entity: FuelSaleEntity
     )
 
 
 
     @Delete
     suspend fun delete(
-        entity: CashBoxeEntity
+        entity: FuelSaleEntity
     )
 
 
 
-    @Query("SELECT * FROM cash_boxes")
+    @Query("SELECT * FROM fuel_sales")
     suspend fun getAll():
-        List<CashBoxeEntity>
+        List<FuelSaleEntity>
 
 
 

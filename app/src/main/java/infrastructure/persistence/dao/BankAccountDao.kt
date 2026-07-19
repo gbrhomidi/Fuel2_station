@@ -1,158 +1,50 @@
-package infrastructure.persistence.entities
+package infrastructure.persistence.dao
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 
-import infrastructure.persistence.base.BaseEntity
-import infrastructure.persistence.converters.SyncConverters
-import infrastructure.persistence.types.SyncStatus
+import androidx.room.*
 
 
-@Entity(
-    tableName = "bank_accounts",
+import infrastructure.persistence.entity.BankAccountEntity
 
-    foreignKeys = [
-        ForeignKey(
-            entity = CurrencyEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["currency_id"],
-            onDelete = ForeignKey.SET_NULL
-        )
-    ],
 
-    indices = [
-        Index(
-            value = ["uuid"],
-            unique = true
-        ),
 
-        Index(
-            value = ["account_number"],
-            unique = true
-        ),
+@Dao
+interface BankAccountDao {
 
-        Index(
-            value = ["currency_id"]
-        ),
 
-        Index(
-            value = ["is_deleted"]
-        )
-    ]
-)
 
+    @Insert
+    suspend fun insert(
+        entity: BankAccountEntity
+    )
 
-@TypeConverters(
-    SyncConverters::class
-)
 
 
-data class BankAccountEntity(
+    @Insert
+    suspend fun insertAll(
+        entities: List<BankAccountEntity>
+    )
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
 
 
-    @ColumnInfo(name = "uuid")
-    override val uuid: String,
+    @Update
+    suspend fun update(
+        entity: BankAccountEntity
+    )
 
 
-    @ColumnInfo(name = "account_number")
-    val accountNumber: String,
 
+    @Delete
+    suspend fun delete(
+        entity: BankAccountEntity
+    )
 
-    @ColumnInfo(name = "bank_name")
-    val bankName: String,
 
 
-    @ColumnInfo(name = "currency_id")
-    val currencyId: Long? = null,
+    @Query("SELECT * FROM bank_accounts")
+    suspend fun getAll():
+        List<BankAccountEntity>
 
 
-    // ADR-012
-    @ColumnInfo(name = "balance_minor")
-    val balanceMinor: Long = 0,
 
-
-    @ColumnInfo(name = "currency_code")
-    val currencyCode: String = "SAR",
-
-
-
-    // Audit
-
-    override val createdBy: Long,
-
-    override val createdAt: String,
-
-    override val updatedBy: Long? = null,
-
-    override val updatedAt: String? = null,
-
-    override val deletedBy: Long? = null,
-
-    override val deletedAt: String? = null,
-
-
-    // Soft delete
-    @ColumnInfo(name = "is_deleted")
-    override val isDeleted: Int = 0,
-
-
-
-    // Sync
-
-    override val syncStatus: SyncStatus = SyncStatus.PENDING,
-
-    override val syncVersion: Int = 1,
-
-    override val syncAt: String? = null,
-
-    override val deviceId: String? = null,
-
-
-    // Lock
-
-    override val rowVersion: Int = 1,
-
-
-    // Metadata
-
-    override val remarks: String? = null,
-
-    override val extraData: String? = null
-
-
-) : BaseEntity(
-
-    uuid = uuid,
-
-    createdBy = createdBy,
-    createdAt = createdAt,
-
-    updatedBy = updatedBy,
-    updatedAt = updatedAt,
-
-    deletedBy = deletedBy,
-    deletedAt = deletedAt,
-
-    isDeleted = isDeleted,
-
-    syncStatus = syncStatus,
-
-    syncVersion = syncVersion,
-
-    syncAt = syncAt,
-
-    deviceId = deviceId,
-
-    rowVersion = rowVersion,
-
-    remarks = remarks,
-
-    extraData = extraData
-)
+}
